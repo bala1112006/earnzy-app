@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import os
 
 # --- App Config ---
 st.set_page_config(page_title="EARNZY Admin", layout="wide")
@@ -13,15 +12,6 @@ if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "page" not in st.session_state:
     st.session_state.page = "Dashboard"
-
-# --- Load API Key ---
-try:
-    API_KEY = st.secrets["EARNZY_API_KEY"]
-except (FileNotFoundError, KeyError):
-    API_KEY = os.getenv("EARNZY_API_KEY")
-    if not API_KEY:
-        st.error("❌ API key not configured. Set it in secrets.toml or as EARNZY_API_KEY environment variable.")
-        st.stop()
 
 # --- Custom CSS ---
 st.markdown("""
@@ -151,7 +141,7 @@ elif st.session_state.page == "Notification":
 
             # Send the POST request with auth as query parameter
             try:
-                url = f"https://api.earnzy.com.in/notify?auth={API_KEY}"
+                url = "https://api.earnzy.com.in/notify?auth=bala10112006"  # Temporary for testing
                 response = requests.post(
                     url,
                     headers={"Content-Type": "application/json"},
