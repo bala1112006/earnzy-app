@@ -1,58 +1,30 @@
 import streamlit as st
-import requests
 
 # ---- Page Config ----
 st.set_page_config(
-    page_title="📢 EARNZY Notifier",
-    page_icon="📲",
+    page_title="EARNZY Admin",
+    page_icon="🛠️",
     layout="centered"
 )
 
-# ---- Title and Info ----
-st.markdown("<h2 style='text-align: center;'>📢 EARNZY Push Notification Panel</h2>", unsafe_allow_html=True)
-st.caption("Send secure push notifications to all app users via FCM + Firebase.")
+# ---- Title ----
+st.markdown("<h1 style='text-align: center;'>🛠️ EARNZY Admin Panel</h1>", unsafe_allow_html=True)
+st.caption("Manage app features, send notifications, and monitor tools.")
 
 st.markdown("---")
 
-# ---- Input Fields ----
-with st.form("notify_form"):
-    col1, col2 = st.columns(2)
-    with col1:
-        title = st.text_input("🔖 Title", placeholder="e.g. 🔥 Daily Task")
-    with col2:
-        auth = st.text_input("🔐 Auth Token", placeholder="Enter your secret auth", type="password")
+# ---- Admin Options ----
+st.subheader("📋 Available Tools")
 
-    body = st.text_area("📝 Message Body", placeholder="e.g. Claim your 20 coins now!", height=100)
-    image = st.text_input("🖼️ Image URL (optional)", placeholder="https://yourcdn.com/image.png")
+st.markdown("### 🔔 Send Push Notification")
+if st.button("Open Notification Sender"):
+    st.switch_page("app.py")  # Only works when deployed as multipage Streamlit app
 
-    submit = st.form_submit_button("🚀 Send Notification")
-
-# ---- On Submit ----
-if submit:
-    if not all([title.strip(), body.strip(), auth.strip()]):
-        st.warning("⚠️ Please fill all required fields: Title, Body, and Auth Token.")
-    else:
-        with st.spinner("Sending notification..."):
-            try:
-                response = requests.post(
-                    f"https://api.earnzy.com.in/notify?auth={auth.strip()}",
-                    headers={"Content-Type": "application/json"},
-                    json={
-                        "topic": "all_users",
-                        "title": title.strip(),
-                        "body": body.strip(),
-                        "image": image.strip()
-                    }
-                )
-                if response.ok:
-                    st.success("✅ Notification sent successfully!")
-                    st.code(response.text, language="json")
-                else:
-                    st.error(f"❌ Error: {response.status_code}")
-                    st.code(response.text, language="json")
-            except Exception as e:
-                st.error("❌ Failed to send notification.")
-                st.exception(e)
+# Future options
+st.markdown("### 🚧 Under Development")
+st.markdown("- 🔐 Device Blocking UI (soon)")
+st.markdown("- 📈 View Notification Logs")
+st.markdown("- 🧪 Play Integrity Check")
 
 # ---- Footer ----
 st.markdown("---")
