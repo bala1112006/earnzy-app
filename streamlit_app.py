@@ -2,30 +2,40 @@ import streamlit as st
 
 # ---- Page Config ----
 st.set_page_config(
-    page_title="EARNZY Admin",
+    page_title="EARNZY Admin Dashboard",
     page_icon="🛠️",
     layout="centered"
 )
 
-# ---- Title ----
-st.markdown("<h1 style='text-align: center;'>🛠️ EARNZY Admin Panel</h1>", unsafe_allow_html=True)
-st.caption("Manage app features, send notifications, and monitor tools.")
+# ---- Custom Header ----
+st.markdown("""
+    <h1 style="text-align:center; font-size:2.3em;">🛠️ EARNZY Admin Panel</h1>
+    <p style="text-align:center; font-size:1.1em; color:gray;">
+        Manage your app – send notifications, monitor status, and more.
+    </p>
+    <hr>
+""", unsafe_allow_html=True)
 
-st.markdown("---")
+# ---- Main Options ----
+st.subheader("📋 Tools Available")
 
-# ---- Admin Options ----
-st.subheader("📋 Available Tools")
+# Button: Open Notification Sender Page
+st.markdown("""
+<div style='text-align:center;'>
+    <a href="https://earnzy-notify.streamlit.app" target="_blank">
+        <button style="padding: 0.7em 1.4em; font-size: 1.1em; background-color: #f63366; color: white; border: none; border-radius: 6px; cursor: pointer;">
+            🚀 Open Notification Sender
+        </button>
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
-st.markdown("### 🔔 Send Push Notification")
-if st.button("Open Notification Sender"):
-    st.switch_page("app.py")  # Only works when deployed as multipage Streamlit app
-
-# Future options
-st.markdown("### 🚧 Under Development")
-st.markdown("- 🔐 Device Blocking UI (soon)")
-st.markdown("- 📈 View Notification Logs")
-st.markdown("- 🧪 Play Integrity Check")
+# Future items
+st.markdown("### 🧪 Coming Soon:")
+st.markdown("- 🔐 Device Block Management")
+st.markdown("- 📈 Analytics & Logs")
+st.markdown("- 🧩 Play Integrity Verification")
 
 # ---- Footer ----
 st.markdown("---")
-st.markdown("<div style='text-align: center; font-size: 13px;'>Made with ❤️ for EARNZY</div>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; font-size: 13px;'>Made with ❤️ by EARNZY Team</div>", unsafe_allow_html=True)
