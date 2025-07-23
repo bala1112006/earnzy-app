@@ -1,21 +1,12 @@
 import streamlit as st
 import requests
-import os
 
 # --- App Config ---
 st.set_page_config(page_title="EARNZY Admin", layout="wide")
 
 USERNAME = "Bala"
 PASSWORD = "bala10112006"
-
-# --- Load API Key Securely ---
-try:
-    API_KEY = st.secrets["auth"]["api_key"]  # Load from secrets.toml
-except (KeyError, FileNotFoundError):
-    API_KEY = os.getenv("EARNZY_API_KEY")  # Fallback to environment variable
-    if not API_KEY:
-        st.error("❌ API key not configured. Set it in secrets.toml or as EARNZY_API_KEY environment variable.")
-        st.stop()
+EXPECTED_API_KEY = "bala10112006"  # Expected API key for validation
 
 # --- Session Init ---
 if "logged_in" not in st.session_state:
@@ -135,35 +126,40 @@ elif st.session_state.page == "Notification":
     body = st.text_area("📝 Message")
     image = st.text_input("🖼️ Image URL (optional)")
     device_token = st.text_input("📱 Device Token (optional)")
+    api_key = st.text_input("🔑 API Key", type="password")
 
     if st.button("🚀 Send Notification"):
-        if topic and title and body:
-            # Prepare payload
-            payload = {
-                "topic": topic,
-                "title": title,
-                "body": body,
-            }
-            if image:
-                payload["image"] = image
-            if device_token:
-                payload["device_token"] = device_token
+        if topic and title and body and api_key:
+            # Validate API key
+            if api_key != EXPECTED_API_KEY:
+                st.error("❌ Invalid API key")
+            else:
+                # Prepare the payload
+                payload = {
+                    "topic": topic,
+                    "title": title,
+                    "body": body,
+                }
+                if image:
+                    payload["image"] = image
+                if device_token:
+                    payload["device_token"] = device_token
 
-            # Make API request
-            try:
-                response = requests.post(
-                    f"https://api.earnzy.com.in/notify?auth={API_KEY}",
-                    headers={"Content-Type": "application/json"},
-                    json=payload
-                )
-                if response.status_code == 200:
-                    st.success("✅ Notification sent successfully!")
-                else:
-                    st.error(f"❌ Failed to send notification: {response.text}")
-            except requests.RequestException as e:
-                st.error(f"❌ Error sending notification: {str(e)}")
+                # Send the POST request
+                try:
+                    response = requests.post(
+                        "https://api.earnzy.com.in/notify",
+                        headers={"Content-Type": "application/json", "auth": api_key},
+                        json=payload,
+                    )
+                    if response.status_code == 200:
+                        st.success("✅ Notification sent successfully!")
+                    else:
+                        st.error(f"❌ Failed to send notification: {response.status_code} - {response.text}")
+                except requests.RequestException as e:
+                    st.error(f"🛑 Error sending notification: {str(e)}")
         else:
-            st.warning("⚠️ Please fill all required fields (Topic, Title, Message).")
+            st.warning("⚠️ Please fill all required fields (Topic, Title, Message, API Key).")
 
 # --- Footer ---
 st.markdown("<div class='footer'>© 2025 EARNZY Admin — Designed for Bala 🖤</div>", unsafe_allow_html=True)
