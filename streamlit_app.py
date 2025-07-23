@@ -80,11 +80,11 @@ if not st.session_state.logged_in:
                 st.session_state.page = "Dashboard"
                 st.rerun()
             else:
-                st.error("❌ Invalid credentials")
+                st.error(" Invalid credentials")
     st.stop()
 
 # =====================
-# ✅ MAIN APP UI
+#  MAIN APP UI
 # =====================
 
 # --- Sidebar ---
@@ -109,7 +109,7 @@ with st.sidebar:
 
 # --- Main Pages ---
 if st.session_state.page == "Dashboard":
-    st.markdown("## 🧠 Dashboard")
+    st.markdown("## ✨ Dashboard")
     st.markdown("""
         <div class='center-card'>
             <h3>📢 Notifications Sent</h3>
@@ -149,13 +149,13 @@ elif st.session_state.page == "Notification":
                     json=payload,
                 )
                 if response.status_code == 200:
-                    st.success("✅ Notification sent successfully!")
+                    st.success(" Notification sent successfully!")
                 else:
-                    st.error(f"❌ Failed to send notification: {response.status_code} - {response.text}")
+                    st.error(f" Failed to send notification: {response.status_code} - {response.text}")
             except requests.RequestException as e:
                 st.error(f"🛑 Error sending notification: {str(e)}")
         else:
-            st.warning("⚠️ Please fill all required fields (API Key, Topic, Title, Message).")
+            st.warning(" Please fill all required fields (API Key, Topic, Title, Message).")
 
 # --- Footer ---
 st.markdown("<div class='footer'>© 2025 EARNZY Admin — Designed for Bala 🖤</div>", unsafe_allow_html=True)
