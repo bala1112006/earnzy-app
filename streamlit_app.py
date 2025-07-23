@@ -64,7 +64,9 @@ input, textarea {
 </style>
 """, unsafe_allow_html=True)
 
-# --- LOGIN ---
+# =====================
+# 🔐 LOGIN PAGE
+# =====================
 if not st.session_state.logged_in:
     st.markdown("## 🔐 Admin Login")
     username = st.text_input("Username")
@@ -73,14 +75,17 @@ if not st.session_state.logged_in:
     if st.button("Login"):
         if username == USERNAME and password == PASSWORD:
             st.session_state.logged_in = True
-            st.session_state.page = "Dashboard"  # ✅ Ensure default page
+            st.session_state.page = "Dashboard"
             st.success("✅ Logged in successfully!")
-            st.experimental_rerun()  # only rerun after login success
         else:
             st.error("❌ Invalid credentials")
     st.stop()
 
-# --- SIDEBAR ---
+# =====================
+# ✅ MAIN APP UI
+# =====================
+
+# --- Sidebar ---
 with st.sidebar:
     st.markdown("## 🔧 Admin Menu")
 
@@ -94,11 +99,12 @@ with st.sidebar:
         st.session_state.logged_in = False
         st.session_state.page = "Dashboard"
         st.success("✅ Logged out")
+        st.stop()
 
     st.markdown("---")
     st.markdown("👤 Logged in as: **Bala**")
 
-# --- MAIN CONTENT ---
+# --- Main Pages ---
 if st.session_state.page == "Dashboard":
     st.markdown("## 🧠 Dashboard")
     st.markdown("""
@@ -119,9 +125,9 @@ elif st.session_state.page == "Notification":
     if st.button("🚀 Send Notification"):
         if topic and title and body:
             st.success("✅ Notification sent successfully!")
-            # Add your API call here
+            # TODO: Add your API request here
         else:
-            st.warning("⚠️ Fill all required fields.")
+            st.warning("⚠️ Please fill all required fields.")
 
-# --- FOOTER ---
-st.markdown("<div class='footer'>© 2025 EARNZY Admin — Built for Bala 🖤</div>", unsafe_allow_html=True)
+# --- Footer ---
+st.markdown("<div class='footer'>© 2025 EARNZY Admin — Designed for Bala 🖤</div>", unsafe_allow_html=True)
