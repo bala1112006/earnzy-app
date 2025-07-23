@@ -18,12 +18,12 @@ st.markdown("---")
 with st.form("notify_form"):
     col1, col2 = st.columns(2)
     with col1:
-        title = st.text_input("🔖 Title", placeholder="")
+        title = st.text_input("🔖 Title", placeholder="e.g. 🔥 Daily Task")
     with col2:
         auth = st.text_input("🔐 Auth Token", placeholder="Enter your secret auth", type="password")
 
-    body = st.text_area("📝 Message Body", placeholder="", height=100)
-    image = st.text_input("🖼️ Image URL (optional)", placeholder="")
+    body = st.text_area("📝 Message Body", placeholder="e.g. Claim your 20 coins now!", height=100)
+    image = st.text_input("🖼️ Image URL (optional)", placeholder="https://yourcdn.com/image.png")
 
     submit = st.form_submit_button("🚀 Send Notification")
 
@@ -45,13 +45,13 @@ if submit:
                     }
                 )
                 if response.ok:
-                    st.success(" Notification sent successfully!")
+                    st.success("✅ Notification sent successfully!")
                     st.code(response.text, language="json")
                 else:
-                    st.error(f" Error: {response.status_code}")
+                    st.error(f"❌ Error: {response.status_code}")
                     st.code(response.text, language="json")
             except Exception as e:
-                st.error(" Failed to send notification.")
+                st.error("❌ Failed to send notification.")
                 st.exception(e)
 
 # ---- Footer ----
