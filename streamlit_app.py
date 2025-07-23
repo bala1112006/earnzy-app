@@ -1,6 +1,6 @@
 import streamlit as st
 
-# --- Config ---
+# --- Page Config ---
 st.set_page_config(page_title="EARNZY Admin", layout="wide")
 
 USERNAME = "Bala"
@@ -12,17 +12,21 @@ if "logged_in" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "Dashboard"
 
-# --- CSS: 2-inch Top Padding + Stylish Sidebar ---
+# --- CSS: Stylish UI + Top Padding Fix ---
 st.markdown("""
     <style>
     html, body, .stApp {
         background-color: #000000;
         color: white;
-        padding-top: 96px !important; /* ~2 inches top padding */
+        padding-top: 96px !important; /* 2 inch approx */
     }
 
-    .block-container {
-        padding: 1rem 2rem !important;
+    section[data-testid="stSidebar"] > div {
+        background-color: #111 !important;
+        padding: 20px;
+        border-radius: 12px;
+        height: 100%;
+        box-shadow: 0 0 20px rgba(255,255,255,0.05);
     }
 
     input, textarea {
@@ -38,46 +42,12 @@ st.markdown("""
         font-weight: bold;
         border-radius: 8px;
         padding: 10px 20px;
+        width: 100%;
+        margin-bottom: 10px;
     }
 
     .stButton > button:hover {
         background: linear-gradient(to right, #ff4b2b, #ff416c);
-    }
-
-    /* Sidebar Style */
-    section[data-testid="stSidebar"] > div {
-        background-color: #111 !important;
-        padding: 20px;
-        border-radius: 12px;
-        height: 100%;
-        box-shadow: 0 0 20px rgba(255,255,255,0.05);
-    }
-
-    .sidebar-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 16px;
-        color: white;
-    }
-
-    .sidebar-link {
-        display: block;
-        padding: 12px;
-        margin-bottom: 10px;
-        background-color: #222;
-        border-radius: 8px;
-        color: white;
-        text-decoration: none;
-        transition: 0.2s;
-    }
-
-    .sidebar-link:hover {
-        background-color: #333;
-    }
-
-    .selected-link {
-        background-color: #f63366 !important;
-        font-weight: bold;
     }
 
     .center-card {
@@ -114,7 +84,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Login ---
+# --- LOGIN ---
 if not st.session_state.logged_in:
     st.markdown("## 🔐 Admin Login")
     username = st.text_input("Username")
@@ -122,37 +92,31 @@ if not st.session_state.logged_in:
     if st.button("Login"):
         if username == USERNAME and password == PASSWORD:
             st.session_state.logged_in = True
-            st.experimental_rerun()
         else:
             st.error("❌ Wrong credentials")
 
-# --- Main Layout ---
+# --- SIDEBAR + PAGE VIEW ---
 else:
-    # Sidebar Navigation
+    # Sidebar
     with st.sidebar:
-        st.markdown("<div class='sidebar-title'>🔧 Admin Menu</div>", unsafe_allow_html=True)
+        st.markdown("## 🔧 Admin Menu")
 
-        dashboard_class = "sidebar-link"
-        notify_class = "sidebar-link"
-        if st.session_state.page == "Dashboard":
-            dashboard_class += " selected-link"
-        if st.session_state.page == "Notification":
-            notify_class += " selected-link"
+        if st.button("🏠 Dashboard"):
+            st.session_state.page = "Dashboard"
 
-        st.markdown(f"<a href='#' class='{dashboard_class}' onclick='window.location.reload();'>{'🏠 Dashboard'}</a>", unsafe_allow_html=True)
-        st.markdown(f"<a href='#' class='{notify_class}' onclick='window.location.reload();'>{'✉️ Notification'}</a>", unsafe_allow_html=True)
+        if st.button("✉️ Notification"):
+            st.session_state.page = "Notification"
+
         if st.button("🔓 Logout"):
             st.session_state.logged_in = False
             st.session_state.page = "Dashboard"
-            st.experimental_rerun()
 
-        st.markdown("<hr>")
-        st.markdown("👤 **Logged in as:** Bala")
+        st.markdown("---")
+        st.markdown("👤 Logged in as: **Bala**")
 
-    # --- Main Pages ---
+    # Pages
     if st.session_state.page == "Dashboard":
         st.markdown("## 🧠 Dashboard")
-
         st.markdown("""
             <div class='center-card'>
                 <h3>📢 Notifications Sent</h3>
@@ -172,8 +136,8 @@ else:
         if st.button("🚀 Send Notification"):
             if topic and title and body:
                 st.success("✅ Notification sent successfully!")
-                # Add real API logic here
+                # call your API here
             else:
                 st.warning("⚠️ Please fill all required fields.")
 
-    st.markdown("<div class='footer'>© 2025 EARNZY Admin — Designed for Bala 🖤</div>", unsafe_allow_html=True)
+    st.markdown("<div class='footer'>© 2025 EARNZY Admin — Built for Bala 🖤</div>", unsafe_allow_html=True)
