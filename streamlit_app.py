@@ -68,17 +68,18 @@ input, textarea {
 # 🔐 LOGIN PAGE
 # =====================
 if not st.session_state.logged_in:
-    st.markdown("## 🔐 Admin Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    with st.container():
+        st.markdown("## 🔐 Admin Login")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
 
-    if st.button("Login"):
-        if username == USERNAME and password == PASSWORD:
-            st.session_state.logged_in = True
-            st.session_state.page = "Dashboard"
-            st.success("✅ Logged in successfully!")
-        else:
-            st.error("❌ Invalid credentials")
+        if st.button("Login"):
+            if username == USERNAME and password == PASSWORD:
+                st.session_state.logged_in = True
+                st.session_state.page = "Dashboard"
+                st.rerun()  # Use st.rerun() instead of st.experimental_rerun()
+            else:
+                st.error("❌ Invalid credentials")
     st.stop()
 
 # =====================
@@ -91,15 +92,16 @@ with st.sidebar:
 
     if st.button("🏠 Dashboard"):
         st.session_state.page = "Dashboard"
+        st.rerun()  # Rerun to refresh the page
 
     if st.button("✉️ Notification"):
         st.session_state.page = "Notification"
+        st.rerun()  # Rerun to refresh the page
 
     if st.button("🔓 Logout"):
         st.session_state.logged_in = False
         st.session_state.page = "Dashboard"
-        st.success("✅ Logged out")
-        st.stop()
+        st.rerun()  # Rerun to refresh the page
 
     st.markdown("---")
     st.markdown("👤 Logged in as: **Bala**")
