@@ -1,6 +1,6 @@
 import streamlit as st
 
-# --- Page Config ---
+# --- Config ---
 st.set_page_config(page_title="EARNZY Admin", layout="wide")
 
 USERNAME = "Bala"
@@ -12,13 +12,13 @@ if "logged_in" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "Dashboard"
 
-# --- CSS: Stylish UI + Top Padding Fix ---
+# --- Custom CSS ---
 st.markdown("""
     <style>
     html, body, .stApp {
         background-color: #000000;
         color: white;
-        padding-top: 96px !important; /* 2 inch approx */
+        padding-top: 96px !important;  /* ~2 inch space */
     }
 
     section[data-testid="stSidebar"] > div {
@@ -84,60 +84,65 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- LOGIN ---
+# --- LOGIN FIX ---
 if not st.session_state.logged_in:
     st.markdown("## 🔐 Admin Login")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
+
     if st.button("Login"):
         if username == USERNAME and password == PASSWORD:
             st.session_state.logged_in = True
+            st.success("✅ Logged in successfully!")
+            st.stop()  # Pause after login to avoid showing login form
         else:
             st.error("❌ Wrong credentials")
+    st.stop()  # Always stop when not logged in
 
-# --- SIDEBAR + PAGE VIEW ---
-else:
-    # Sidebar
-    with st.sidebar:
-        st.markdown("## 🔧 Admin Menu")
+# --- SIDEBAR ---
+with st.sidebar:
+    st.markdown("## 🔧 Admin Menu")
 
-        if st.button("🏠 Dashboard"):
-            st.session_state.page = "Dashboard"
+    if st.button("🏠 Dashboard"):
+        st.session_state.page = "Dashboard"
 
-        if st.button("✉️ Notification"):
-            st.session_state.page = "Notification"
+    if st.button("✉️ Notification"):
+        st.session_state.page = "Notification"
 
-        if st.button("🔓 Logout"):
-            st.session_state.logged_in = False
-            st.session_state.page = "Dashboard"
+    if st.button("🔓 Logout"):
+        st.session_state.logged_in = False
+        st.session_state.page = "Dashboard"
 
-        st.markdown("---")
-        st.markdown("👤 Logged in as: **Bala**")
+    st.markdown("---")
+    st.markdown("👤 Logged in as: **Bala**")
 
-    # Pages
-    if st.session_state.page == "Dashboard":
-        st.markdown("## 🧠 Dashboard")
-        st.markdown("""
-            <div class='center-card'>
-                <h3>📢 Notifications Sent</h3>
-                <p><b>Loading count...</b></p>
-                <p>Track push alerts sent via panel.</p>
-            </div>
-        """, unsafe_allow_html=True)
+# --- PAGE: DASHBOARD ---
+if st.session_state.page == "Dashboard":
+    st.markdown("## 🧠 Dashboard")
 
-    elif st.session_state.page == "Notification":
-        st.markdown("# ✉️ Send Push Notification")
+    st.markdown("""
+        <div class='center-card'>
+            <h3>📢 Notifications Sent</h3>
+            <p><b>Loading count...</b></p>
+            <p>Track push alerts sent via panel.</p>
+        </div>
+    """, unsafe_allow_html=True)
 
-        topic = st.text_input("📍 Topic (e.g. all_users)")
-        title = st.text_input("📰 Title")
-        body = st.text_area("📝 Message")
-        image = st.text_input("🖼️ Image URL (optional)")
+# --- PAGE: NOTIFICATION ---
+elif st.session_state.page == "Notification":
+    st.markdown("# ✉️ Send Push Notification")
 
-        if st.button("🚀 Send Notification"):
-            if topic and title and body:
-                st.success("✅ Notification sent successfully!")
-                # call your API here
-            else:
-                st.warning("⚠️ Please fill all required fields.")
+    topic = st.text_input("📍 Topic (e.g. all_users)")
+    title = st.text_input("📰 Title")
+    body = st.text_area("📝 Message")
+    image = st.text_input("🖼️ Image URL (optional)")
 
-    st.markdown("<div class='footer'>© 2025 EARNZY Admin — Built for Bala 🖤</div>", unsafe_allow_html=True)
+    if st.button("🚀 Send Notification"):
+        if topic and title and body:
+            st.success("✅ Notification sent successfully!")
+            # Add API logic here
+        else:
+            st.warning("⚠️ Please fill all required fields.")
+
+# --- FOOTER ---
+st.markdown("<div class='footer'>© 2025 EARNZY Admin — Built with ❤️ by Bala</div>", unsafe_allow_html=True)
