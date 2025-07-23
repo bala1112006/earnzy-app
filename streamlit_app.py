@@ -12,24 +12,24 @@ if "logged_in" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "Dashboard"
 
-# --- CSS: Minimal Black UI + 1 Centered Card ---
+# --- CSS: 2-inch Top Padding + Stylish Sidebar ---
 st.markdown("""
     <style>
     html, body, .stApp {
         background-color: #000000;
         color: white;
+        padding-top: 96px !important; /* ~2 inches top padding */
     }
 
     .block-container {
-        padding: 0 2rem !important;
+        padding: 1rem 2rem !important;
     }
 
-    .sidebar {
-        background-color: #111;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(255,255,255,0.05);
-        height: 100%;
+    input, textarea {
+        background-color: #111 !important;
+        color: white !important;
+        border: 1px solid #444 !important;
+        border-radius: 6px !important;
     }
 
     .stButton > button {
@@ -44,34 +44,45 @@ st.markdown("""
         background: linear-gradient(to right, #ff4b2b, #ff416c);
     }
 
-    input, textarea {
+    /* Sidebar Style */
+    section[data-testid="stSidebar"] > div {
         background-color: #111 !important;
-        color: white !important;
-        border: 1px solid #444 !important;
-        border-radius: 6px !important;
+        padding: 20px;
+        border-radius: 12px;
+        height: 100%;
+        box-shadow: 0 0 20px rgba(255,255,255,0.05);
     }
 
-    .nav-button {
-        display: block;
-        background: none;
-        border: none;
+    .sidebar-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 16px;
         color: white;
-        font-size: 16px;
-        text-align: left;
-        padding: 12px;
-        margin-bottom: 8px;
-        border-radius: 8px;
-        transition: 0.2s;
-        width: 100%;
     }
 
-    .nav-button:hover {
+    .sidebar-link {
+        display: block;
+        padding: 12px;
+        margin-bottom: 10px;
         background-color: #222;
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .sidebar-link:hover {
+        background-color: #333;
+    }
+
+    .selected-link {
+        background-color: #f63366 !important;
+        font-weight: bold;
     }
 
     .center-card {
         max-width: 400px;
-        margin: 60px auto;
+        margin: 40px auto;
         background: #111;
         padding: 25px;
         border-radius: 18px;
@@ -96,6 +107,10 @@ st.markdown("""
         font-size: 12px;
         color: #777;
     }
+
+    @media(max-width: 768px){
+        .center-card { width: 90%; margin-top: 60px; }
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -113,24 +128,28 @@ if not st.session_state.logged_in:
 
 # --- Main Layout ---
 else:
-    # Sidebar
+    # Sidebar Navigation
     with st.sidebar:
-        st.markdown("<div class='sidebar'>", unsafe_allow_html=True)
+        st.markdown("<div class='sidebar-title'>🔧 Admin Menu</div>", unsafe_allow_html=True)
 
-        if st.button("🏠 Dashboard", key="dash_btn"):
-            st.session_state.page = "Dashboard"
-        if st.button("✉️ Notification", key="notify_btn"):
-            st.session_state.page = "Notification"
-        if st.button("🔓 Logout", key="logout_btn"):
+        dashboard_class = "sidebar-link"
+        notify_class = "sidebar-link"
+        if st.session_state.page == "Dashboard":
+            dashboard_class += " selected-link"
+        if st.session_state.page == "Notification":
+            notify_class += " selected-link"
+
+        st.markdown(f"<a href='#' class='{dashboard_class}' onclick='window.location.reload();'>{'🏠 Dashboard'}</a>", unsafe_allow_html=True)
+        st.markdown(f"<a href='#' class='{notify_class}' onclick='window.location.reload();'>{'✉️ Notification'}</a>", unsafe_allow_html=True)
+        if st.button("🔓 Logout"):
             st.session_state.logged_in = False
             st.session_state.page = "Dashboard"
             st.experimental_rerun()
 
-        st.markdown("<hr>", unsafe_allow_html=True)
+        st.markdown("<hr>")
         st.markdown("👤 **Logged in as:** Bala")
-        st.markdown("</div>", unsafe_allow_html=True)
 
-    # Page: Dashboard
+    # --- Main Pages ---
     if st.session_state.page == "Dashboard":
         st.markdown("## 🧠 Dashboard")
 
@@ -142,7 +161,6 @@ else:
             </div>
         """, unsafe_allow_html=True)
 
-    # Page: Notification
     elif st.session_state.page == "Notification":
         st.markdown("# ✉️ Send Push Notification")
 
@@ -154,9 +172,8 @@ else:
         if st.button("🚀 Send Notification"):
             if topic and title and body:
                 st.success("✅ Notification sent successfully!")
-                # Replace with API call
+                # Add real API logic here
             else:
                 st.warning("⚠️ Please fill all required fields.")
 
-    # Footer
-    st.markdown("<div class='footer'>© 2025 EARNZY Admin — Built for Bala 🖤</div>", unsafe_allow_html=True)
+    st.markdown("<div class='footer'>© 2025 EARNZY Admin — Designed for Bala 🖤</div>", unsafe_allow_html=True)
