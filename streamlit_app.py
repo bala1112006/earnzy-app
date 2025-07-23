@@ -12,13 +12,13 @@ if "logged_in" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "Dashboard"
 
-# --- Custom CSS ---
+# --- Custom CSS for UI ---
 st.markdown("""
     <style>
     html, body, .stApp {
         background-color: #000000;
         color: white;
-        padding-top: 96px !important;  /* ~2 inch space */
+        padding-top: 96px !important; /* ~2 inch space */
     }
 
     section[data-testid="stSidebar"] > div {
@@ -84,7 +84,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- LOGIN FIX ---
+# --- LOGIN ---
 if not st.session_state.logged_in:
     st.markdown("## 🔐 Admin Login")
     username = st.text_input("Username")
@@ -94,10 +94,10 @@ if not st.session_state.logged_in:
         if username == USERNAME and password == PASSWORD:
             st.session_state.logged_in = True
             st.success("✅ Logged in successfully!")
-            st.stop()  # Pause after login to avoid showing login form
+            st.stop()  # stop here to avoid showing login again
         else:
             st.error("❌ Wrong credentials")
-    st.stop()  # Always stop when not logged in
+    st.stop()
 
 # --- SIDEBAR ---
 with st.sidebar:
@@ -110,8 +110,9 @@ with st.sidebar:
         st.session_state.page = "Notification"
 
     if st.button("🔓 Logout"):
-        st.session_state.logged_in = False
-        st.session_state.page = "Dashboard"
+        st.session_state.clear()  # ✅ fully clears login + page state
+        st.success("✅ Logged out")
+        st.experimental_rerun()  # ✅ safely refreshes to login
 
     st.markdown("---")
     st.markdown("👤 Logged in as: **Bala**")
@@ -140,9 +141,9 @@ elif st.session_state.page == "Notification":
     if st.button("🚀 Send Notification"):
         if topic and title and body:
             st.success("✅ Notification sent successfully!")
-            # Add API logic here
+            # 🧠 Add your notification API call here
         else:
             st.warning("⚠️ Please fill all required fields.")
 
 # --- FOOTER ---
-st.markdown("<div class='footer'>© 2025 EARNZY Admin — Built with ❤️ by Bala</div>", unsafe_allow_html=True)
+st.markdown("<div class='footer'>© 2025 EARNZY Admin — Designed for Bala 🖤</div>", unsafe_allow_html=True)
