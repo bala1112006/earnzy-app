@@ -120,6 +120,7 @@ if st.session_state.page == "Dashboard":
 
 elif st.session_state.page == "Notification":
     st.markdown("# ✉️ Send Push Notification")
+    api_key = st.text_input("🔑 API Key", type="password")
     topic = st.text_input("📍 Topic (e.g. all_users)")
     title = st.text_input("📰 Title")
     body = st.text_area("📝 Message")
@@ -127,7 +128,7 @@ elif st.session_state.page == "Notification":
     device_token = st.text_input("📱 Device Token (optional)")
 
     if st.button("🚀 Send Notification"):
-        if topic and title and body:
+        if api_key and topic and title and body:
             # Prepare the payload
             payload = {
                 "topic": topic,
@@ -141,7 +142,7 @@ elif st.session_state.page == "Notification":
 
             # Send the POST request with auth as query parameter
             try:
-                url = "https://api.earnzy.com.in/notify?auth=bala10112006"  # Temporary for testing
+                url = f"https://api.earnzy.com.in/notify?auth={api_key}"
                 response = requests.post(
                     url,
                     headers={"Content-Type": "application/json"},
@@ -154,7 +155,7 @@ elif st.session_state.page == "Notification":
             except requests.RequestException as e:
                 st.error(f"🛑 Error sending notification: {str(e)}")
         else:
-            st.warning("⚠️ Please fill all required fields (Topic, Title, Message).")
+            st.warning("⚠️ Please fill all required fields (API Key, Topic, Title, Message).")
 
 # --- Footer ---
 st.markdown("<div class='footer'>© 2025 EARNZY Admin — Designed for Bala 🖤</div>", unsafe_allow_html=True)
