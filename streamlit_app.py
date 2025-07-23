@@ -1,228 +1,151 @@
 import streamlit as st
 
-# --- Session State for Login ---
-if 'authenticated' not in st.session_state:
-    st.session_state['authenticated'] = False
+# --- Login Setup ---
+st.set_page_config(page_title="EARNZY Admin Login", page_icon="🔐", layout="centered")
 
-# --- Login Screen ---
-if not st.session_state['authenticated']:
+# --- Pre-defined login values ---
+USERNAME = "Bala"
+PASSWORD = "bala10112006"
+
+# --- Session check ---
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+# --- LOGIN FORM ---
+if not st.session_state.logged_in:
     st.markdown("""
         <style>
             .login-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 100vh;
-                background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
-                color: #e0e0e0;
-            }
-            .login-box {
-                background: rgba(42, 42, 78, 0.9);
-                padding: 30px;
-                border-radius: 15px;
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-                text-align: center;
-                width: 90%;
+                background: #ffffff;
+                padding: 30px 40px;
+                border-radius: 16px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
                 max-width: 400px;
+                margin: 80px auto;
+                text-align: center;
             }
-            .login-box h2 {
-                color: #00ffcc;
+            .login-container h2 {
                 margin-bottom: 20px;
-                font-size: 1.8em;
+                color: #f63366;
             }
-            .login-box input {
-                width: 100%;
-                padding: 12px;
-                margin: 10px 0;
-                border: none;
-                border-radius: 8px;
-                background: #3a3a5e;
-                color: #e0e0e0;
-                font-size: 1em;
-            }
-            .login-box button {
-                padding: 12px 25px;
-                background: #00cc99;
-                border: none;
-                border-radius: 8px;
-                color: #1a1a2e;
-                font-weight: 600;
-                cursor: pointer;
-                transition: background 0.3s ease;
-                font-size: 1em;
-            }
-            .login-box button:hover {
-                background: #00ffcc;
-            }
-            @media (max-width: 768px) {
-                .login-box { padding: 20px; }
-                .login-box h2 { font-size: 1.5em; }
+            input {
+                border-radius: 8px !important;
             }
         </style>
     """, unsafe_allow_html=True)
 
     st.markdown("<div class='login-container'>", unsafe_allow_html=True)
-    st.markdown("<div class='login-box'>", unsafe_allow_html=True)
-    st.markdown("<h2>Login to EARNZY Admin</h2>", unsafe_allow_html=True)
+    st.markdown("<h2>🔐 EARNZY Admin Login</h2>", unsafe_allow_html=True)
 
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
-        if username == "Bala" and password == "bala10112006":
-            st.session_state['authenticated'] = True
-            st.rerun()  # Updated to st.rerun()
+        if username == USERNAME and password == PASSWORD:
+            st.session_state.logged_in = True
+            st.success("✅ Login successful! Loading dashboard...")
+            st.rerun()
         else:
-            st.error("Invalid username or password")
+            st.error("❌ Invalid credentials. Try again.")
 
     st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+
+# --- DASHBOARD UI ---
 else:
-    # --- Page Setup ---
-    st.set_page_config(
-        page_title="EARNZY Admin Panel",
-        page_icon="⚡",
-        layout="wide"
-    )
+    # Stylish UI begins
+    st.set_page_config(page_title="EARNZY Admin", layout="wide")
 
-    # --- Custom CSS ---
     st.markdown("""
         <style>
-            html, body {
-                font-family: 'Arial', sans-serif;
-                background: #1a1a2e;
-                color: #e0e0e0;
-                margin: 0;
-                padding: 0;
-            }
-            .stApp {
-                background: #1a1a2e;
-            }
-            .sidebar .sidebar-content {
-                background: #25253f;
-                color: #e0e0e0;
-            }
-            .title {
-                text-align: center;
-                font-size: 2.2em;
-                font-weight: 700;
-                color: #00ffcc;
-                margin: 1em 0;
-            }
-            .subtitle {
-                text-align: center;
-                font-size: 1em;
-                color: #a0a0b0;
-                margin-bottom: 1.5em;
-            }
-            .grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 15px;
-                padding: 15px;
-                max-width: 1200px;
-                margin: 0 auto;
-            }
+            html, body { font-family: 'Poppins', sans-serif; background-color: #f4f6fc; }
+            .title { text-align: center; font-size: 2.5em; font-weight: bold; color: #222; margin-top: 10px; }
+            .subtitle { text-align: center; font-size: 1.1em; color: #555; margin-bottom: 30px; }
+            .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; }
             .card {
-                background: #2a2a4e;
-                padding: 20px;
-                border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                width: 310px;
+                padding: 25px;
+                border-radius: 20px;
+                background: linear-gradient(to bottom right, #ffffff, #f1f3f6);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
                 text-align: center;
-                transition: transform 0.2s ease;
+                transition: all 0.3s ease;
             }
             .card:hover {
                 transform: translateY(-5px);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.12);
             }
-            .card h3 {
-                font-size: 1.3em;
-                color: #00ffcc;
-                margin: 10px 0;
-            }
-            .card p {
-                font-size: 0.9em;
-                color: #b0b0c0;
-                margin-bottom: 15px;
-            }
+            .card img { width: 70px; margin-bottom: 15px; }
+            .card h3 { font-size: 1.3em; color: #333; }
+            .card p { color: #555; font-size: 0.95em; }
             .btn {
+                margin-top: 10px;
                 padding: 10px 20px;
-                background: #00cc99;
-                border: none;
-                border-radius: 8px;
-                color: #1a1a2e;
-                font-weight: 600;
+                background: linear-gradient(to right, #f63366, #ff4b2b);
+                color: white;
                 text-decoration: none;
+                font-weight: bold;
+                border-radius: 8px;
                 display: inline-block;
-                transition: background 0.3s ease;
             }
             .btn:hover {
-                background: #00ffcc;
-            }
-            .footer {
-                text-align: center;
-                font-size: 0.85em;
-                color: #606070;
-                margin-top: 2em;
-                padding-top: 1em;
-                border-top: 1px solid #2a2a4e;
+                background: linear-gradient(to right, #ff4b2b, #f63366);
             }
             @media (max-width: 768px) {
-                .title { font-size: 1.8em; }
-                .subtitle { font-size: 0.9em; }
-                .card { padding: 15px; }
-                .btn { padding: 8px 16px; }
+                .card { width: 90%; }
             }
         </style>
     """, unsafe_allow_html=True)
 
-    # --- Sidebar ---
-    with st.sidebar:
-        st.markdown("<h2 style='color: #00ffcc; text-align: center;'>EARNZY Admin</h2>", unsafe_allow_html=True)
-        st.markdown("<p style='color: #a0a0b0; text-align: center;'>Manage your platform</p>", unsafe_allow_html=True)
-        st.markdown("---")
-        option = st.selectbox("Navigation", ["Dashboard", "Notifications", "Security", "Devices"], index=0)
-        st.markdown("---")
-        st.markdown("<p style='color: #606070; text-align: center;'>© 2025 EARNZY</p>", unsafe_allow_html=True)
-
-    # --- Main Content ---
-    st.markdown("<div class='title'>⚡ EARNZY Admin Dashboard</div>", unsafe_allow_html=True)
-    st.markdown("<div class='subtitle'>Control notifications, security, and devices seamlessly</div>", unsafe_allow_html=True)
-
-    # --- Cards Section ---
+    st.markdown("<div class='title'>🚀 EARNZY Admin Dashboard</div>", unsafe_allow_html=True)
+    st.markdown("<div class='subtitle'>Manage notifications, users, and more</div>", unsafe_allow_html=True)
     st.markdown("<div class='grid'>", unsafe_allow_html=True)
 
-    if option == "Dashboard" or option == "Notifications":
-        st.markdown("""
-            <div class='card'>
-                <h3>Push Notification</h3>
-                <p>Send title, body, and image via FCM to all app users instantly.</p>
-                <a class='btn' href='https://earnzy-notify.streamlit.app' target='_blank'>Open Sender</a>
-            </div>
-        """, unsafe_allow_html=True)
+    # --- CARD 1 ---
+    st.markdown("""
+        <div class='card'>
+            <img src='https://cdn-icons-png.flaticon.com/512/9068/9068749.png'>
+            <h3>Send Notification</h3>
+            <p>Push rich FCM alerts with title, body & image.</p>
+            <a class='btn' href='https://earnzy-notify.streamlit.app' target='_blank'>Open Sender</a>
+        </div>
+    """, unsafe_allow_html=True)
 
-    if option == "Dashboard" or option == "Security":
-        st.markdown("""
-            <div class='card'>
-                <h3>Play Integrity</h3>
-                <p>Verify devices before login to block rooted or modified systems.</p>
-                <a class='btn' href='#' onclick=\"alert('Coming Soon')\">Coming Soon</a>
-            </div>
-        """, unsafe_allow_html=True)
+    # --- CARD 2 ---
+    st.markdown("""
+        <div class='card'>
+            <img src='https://cdn-icons-png.flaticon.com/512/5986/5986056.png'>
+            <h3>Play Integrity</h3>
+            <p>Verify Play Protect certified safe devices.</p>
+            <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
+        </div>
+    """, unsafe_allow_html=True)
 
-    if option == "Dashboard" or option == "Devices":
-        st.markdown("""
-            <div class='card'>
-                <h3>Device Block</h3>
-                <p>View & manage rooted or tampered device access from Firebase.</p>
-                <a class='btn' href='#' onclick=\"alert('Coming Soon')\">Coming Soon</a>
-            </div>
-        """, unsafe_allow_html=True)
+    # --- CARD 3 ---
+    st.markdown("""
+        <div class='card'>
+            <img src='https://cdn-icons-png.flaticon.com/512/6645/6645114.png'>
+            <h3>Device Block</h3>
+            <p>See & manage rooted/tampered device list.</p>
+            <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # --- CARD 4 ---
+    st.markdown("""
+        <div class='card'>
+            <img src='https://cdn-icons-png.flaticon.com/512/553/553416.png'>
+            <h3>Notification Logs</h3>
+            <p>Track sent alerts by admin + timestamps.</p>
+            <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # --- Footer ---
-    st.markdown("<div class='footer'>© 2025 EARNZY Admin | Designed with ❤️ by Bala</div>", unsafe_allow_html=True)
+    # --- Logout ---
+    if st.button("🔓 Logout"):
+        st.session_state.logged_in = False
+        st.rerun()
 
-    # --- Version ---
-    st.markdown("<p style='text-align: center; color: #606070; font-size: 0.8em;'>Version 1.0.0</p>", unsafe_allow_html=True)
+    st.markdown("<hr>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; font-size: 13px;'>© 2025 EARNZY Admin | Built with ❤️ by Bala</p>", unsafe_allow_html=True)
