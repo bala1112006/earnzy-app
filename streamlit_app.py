@@ -1,232 +1,135 @@
 import streamlit as st
 
-# ✅ Page setup
+# --- Page Setup ---
 st.set_page_config(
-    page_title="EARNZY Admin",
-    page_icon="🛠️",
+    page_title="EARNZY Admin Panel",
+    page_icon="🧠",
     layout="wide"
 )
 
-# ✅ Custom CSS for modern UI + animations + mobile responsiveness
+# --- Custom CSS ---
 st.markdown("""
     <style>
-        /* Base styles */
-        html, body, [class*="css"] {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #1a1a1a;
-            margin: 0;
-            padding: 0;
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            background: #f1f3f6;
         }
-
-        /* Title and subtitle */
-        .main-title {
+        .title {
             text-align: center;
-            font-size: 2.8em;
+            font-size: 2.5em;
             font-weight: 700;
-            color: #1a1a1a;
-            margin-top: 20px;
-            animation: fadeInDown 1s ease-in-out;
+            color: #1e1e2f;
+            margin-top: 0.5em;
         }
-        .sub-title {
+        .subtitle {
             text-align: center;
             font-size: 1.1em;
-            color: #4a4a4a;
-            margin-bottom: 50px;
-            animation: fadeIn 1.2s ease-in-out;
+            color: #5a5a5a;
+            margin-bottom: 2em;
         }
-
-        /* Card grid */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            justify-items: center;
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
         }
-
-        /* Card styles */
         .card {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            padding: 24px;
+            border-radius: 20px;
+            background: linear-gradient(to bottom right, #ffffff, #f4f6fa);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: fadeInUp 0.8s ease-in-out;
-            position: relative;
-            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 14px 35px rgba(0,0,0,0.1);
         }
-
-        /* Card icon */
         .card img {
-            width: 60px;
+            width: 70px;
             margin-bottom: 15px;
-            filter: brightness(1.1);
         }
-
-        /* Card title and description */
         .card h3 {
+            font-size: 1.3em;
             margin: 10px 0;
-            font-size: 1.4em;
-            font-weight: 600;
-            color: #1a1a1a;
+            color: #2b2b3c;
         }
         .card p {
             font-size: 0.95em;
-            color: #6b7280;
+            color: #5e5e68;
             margin-bottom: 15px;
         }
-
-        /* Button styles with ripple effect */
         .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            padding: 10px 20px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            border-radius: 8px;
             color: white;
-            border-radius: 10px;
+            font-weight: bold;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95em;
-            position: relative;
-            overflow: hidden;
+            display: inline-block;
             transition: background 0.3s ease;
         }
         .btn:hover {
-            background: linear-gradient(45deg, #e02155, #ff4d4d);
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
         }
-        .btn::after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            top: 50%;
-            left: 50%;
-            transform-origin: center;
-            pointer-events: none;
-        }
-        .btn:active::after {
-            animation: ripple 0.6s linear;
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes ripple {
-            to { transform: scale(4); opacity: 0; }
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            font-size: 0.85em;
-            color: #6b7280;
-            margin-top: 40px;
-            padding: 20px 0;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        /* Mobile responsiveness */
         @media (max-width: 768px) {
-            .main-title {
-                font-size: 2.2em;
-            }
-            .sub-title {
-                font-size: 1em;
-            }
-            .card {
-                width: 100%;
-                padding: 20px;
-            }
-            .card-grid {
-                grid-template-columns: 1fr;
-                padding: 10px;
-            }
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.9em;
-            }
-        }
-
-        /* Page load animation */
-        .stApp {
-            animation: fadeIn 0.5s ease-in-out;
+            .card { width: 90%; }
         }
     </style>
 """, unsafe_allow_html=True)
 
-# ✅ Title & Subtitle
-st.markdown("<div class='main-title'>🚀 EARNZY Admin Panel</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-title'>Effortlessly manage your app with powerful tools for notifications, integrity, and device control</div>", unsafe_allow_html=True)
+# --- Title ---
+st.markdown("<div class='title'>🚀 EARNZY Admin Dashboard</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Stylish control panel to manage notifications, security, and devices</div>", unsafe_allow_html=True)
 
-# ✅ Cards Grid
-st.markdown("<div class='card-grid'>", unsafe_allow_html=True)
+# --- Cards Section ---
+st.markdown("<div class='grid'>", unsafe_allow_html=True)
 
-# ✅ Push Notification Card
+# --- Card 1: Notification Sender ---
 st.markdown("""
-    <div class='card'>
-        <img src='https://cdn-icons-png.flaticon.com/512/9068/9068749.png' alt='Push Notification'>
-        <h3>Push Notifications</h3>
-        <p>Send engaging notifications with title, body, and images via FCM to all users.</p>
-        <a class='btn' href='https://earnzy-notify.streamlit.app' target='_blank'>Open Sender</a>
-    </div>
+<div class='card'>
+    <img src='https://cdn-icons-png.flaticon.com/512/9068/9068749.png'>
+    <h3>Push Notification</h3>
+    <p>Send title, body, and image via FCM to all app users instantly.</p>
+    <a class='btn' href='https://earnzy-notify.streamlit.app' target='_blank'>Open Sender</a>
+</div>
 """, unsafe_allow_html=True)
 
-# ✅ Play Integrity Card
+# --- Card 2: Play Integrity ---
 st.markdown("""
-    <div class='card'>
-        <img src='https://cdn-icons-png.flaticon.com/512/5986/5986056.png' alt='Play Integrity'>
-        <h3>Play Integrity</h3>
-        <p>Verify device safety and ensure unrooted devices via API checks.</p>
-        <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
-    </div>
+<div class='card'>
+    <img src='https://cdn-icons-png.flaticon.com/512/5986/5986056.png'>
+    <h3>Play Integrity</h3>
+    <p>Verify devices before login to block rooted or modified systems.</p>
+    <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
+</div>
 """, unsafe_allow_html=True)
 
-# ✅ Blocked Device Card
+# --- Card 3: Device Block List ---
 st.markdown("""
-    <div class='card'>
-        <img src='https://cdn-icons-png.flaticon.com/512/6645/6645114.png' alt='Device Block'>
-        <h3>Device Block List</h3>
-        <p>Manage rooted or banned devices seamlessly using Firebase.</p>
-        <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
-    </div>
+<div class='card'>
+    <img src='https://cdn-icons-png.flaticon.com/512/6645/6645114.png'>
+    <h3>Device Block</h3>
+    <p>View & manage rooted or tampered device access from Firebase.</p>
+    <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
+</div>
 """, unsafe_allow_html=True)
 
-# ✅ Notification Logs Card
+# --- Card 4: Logs ---
 st.markdown("""
-    <div class='card'>
-        <img src='https://cdn-icons-png.flaticon.com/512/553/553416.png' alt='Notification Logs'>
-        <h3>Notification Logs</h3>
-        <p>Monitor and track all sent notifications with detailed logs.</p>
-        <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
-    </div>
+<div class='card'>
+    <img src='https://cdn-icons-png.flaticon.com/512/553/553416.png'>
+    <h3>Notification Logs</h3>
+    <p>Track history of notifications sent by admin with timestamps.</p>
+    <a class='btn' href='#' onclick="alert('Coming Soon')">Coming Soon</a>
+</div>
 """, unsafe_allow_html=True)
 
-# ✅ Close grid
 st.markdown("</div>", unsafe_allow_html=True)
 
-# ✅ Footer
+# --- Footer ---
 st.markdown("""
-    <div class='footer'>
-        © 2025 EARNZY Admin Panel | All rights reserved.
-    </div>
+    <hr>
+    <p style='text-align:center; font-size: 13px;'>© 2025 EARNZY Admin | Designed with ❤️ by Bala</p>
 """, unsafe_allow_html=True)
